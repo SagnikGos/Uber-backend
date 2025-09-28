@@ -1,5 +1,6 @@
 import { prisma } from "../../../prisma.client";
 import type { User } from "@prisma/client";
+import jwt from "jsonwebtoken";
 
 export interface createRiderDTO {
     phoneNumber: string;
@@ -25,6 +26,10 @@ export class UserService {
                 role: 'RIDER'
             }
         });
+    }
+
+    public static async generateAuthToken(userId: string): Promise<string> {
+        return jwt.sign({ userId }, process.env.JWT_SECRET as string, { expiresIn: '1d' });
     }
 }
 
